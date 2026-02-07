@@ -4,45 +4,71 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #fff0f3;
-    font-family: 'Segoe UI', sans-serif;
-    transition: 0.8s;
+    background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('Desktop & Ipad Wallpaper.jpg');
+    background-size: cover;
+    background-position: center;
     overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    transition: 1s;
 }
 
-body.sad-mode {
-    background: #1a1a1a;
-    filter: grayscale(100%);
+/* Персонажі */
+.character {
+    position: absolute;
+    bottom: 50px;
+    width: 150px; /* Налаштуй розмір під свої png */
+    transition: all 1.5s ease-in-out;
+    z-index: 5;
 }
 
+/* Початковий вхід */
+.knight-entry { left: -200px; animation: enterLeft 1.5s forwards 0.5s; }
+.princess-entry { right: -200px; animation: enterRight 1.5s forwards 0.5s; }
+
+@keyframes enterLeft { to { left: 10%; } }
+@keyframes enterRight { to { right: 10%; } }
+
+/* Стан: Підходять один до одного */
+.approach-knight { left: 35% !important; }
+.approach-princess { right: 35% !important; }
+
+/* Стан: Принцеса йде геть */
+.princess-leave { right: -300px !important; }
+
+/* Картка */
 .card {
-    background: white;
-    padding: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 40px;
     border-radius: 30px;
-    box-shadow: 0 20px 40px rgba(255, 77, 109, 0.2);
     text-align: center;
-    width: 380px;
-    transition: 0.5s;
     z-index: 10;
+    width: 350px;
 }
 
-.heart-icon { font-size: 50px; margin-bottom: 20px; animation: pulse 1.5s infinite; }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-
-h1 { color: #ff4d6d; font-size: 24px; margin-bottom: 30px; min-height: 70px; }
-
-.btn-group { display: flex; justify-content: center; gap: 20px; }
-
-button {
-    padding: 12px 30px;
-    font-size: 18px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
+/* Ефекти сердечок та нот */
+.floating-item {
+    position: absolute;
+    font-size: 24px;
+    pointer-events: none;
+    animation: floatUp 2s ease-out forwards;
 }
 
-#yesBtn { background: #ff4d6d; color: white; }
-#noBtn { background: #8e9aaf; color: white; position: relative; }
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+}
+
+/* Кружляння нот навколо лицаря */
+.note-circle {
+    position: absolute;
+    animation: rotateNote 3s linear infinite;
+}
+
+@keyframes rotateNote {
+    from { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+}
+
+body.sad-mode { background-color: #000; background-image: none; filter: grayscale(1); }
 
