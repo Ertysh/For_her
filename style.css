@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+    font-family: 'Arial', sans-serif;
+    overflow: hidden; /* Щоб кнопка не створювала скрол, коли втікає */
+}
+
+.card {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+    min-width: 320px;
+    position: relative;
+}
+
+h1 {
+    color: #d63384;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    min-height: 60px; /* Щоб картка не "стрибала" при зміні тексту */
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+button {
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+}
+
+#yesBtn {
+    background-color: #ff4d6d;
+    color: white;
+}
+
+#yesBtn:hover {
+    transform: scale(1.1);
+    background-color: #ff758f;
+}
+
+#noBtn {
+    background-color: #adb5bd;
+    color: white;
+    position: absolute; /* Потрібно для вільного переміщення */
+    transition: all 0.1s ease;
+}
