@@ -13,6 +13,7 @@ body {
     transition: all 1.2s ease;
 }
 
+/* Кнопка звуку */
 .sound-control {
     position: fixed;
     left: 15px;
@@ -25,8 +26,11 @@ body {
     height: 45px;
     cursor: pointer;
     font-size: 20px;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Персонажі */
@@ -34,7 +38,6 @@ body {
     position: absolute;
     bottom: 30px;
     width: 160px;
-    /* Плавний рух */
     transition: all 2s cubic-bezier(0.34, 1.56, 0.64, 1); 
     z-index: 5;
     filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
@@ -46,41 +49,94 @@ body {
 @keyframes enterLeft { to { left: 8%; } }
 @keyframes enterRight { to { right: 8%; } }
 
-/* Стан зближення - ще ближче і плавно */
+/* Стан зближення (ще ближче) */
 .approach-knight { left: 38% !important; }
 .approach-princess { right: 38% !important; }
 
 .princess-leave { right: -500px !important; opacity: 0; }
 
+/* Картка */
 .card {
-    background: rgba(30, 30, 50, 0.7);
-    backdrop-filter: blur(20px);
-    padding: 40px;
+    background: rgba(20, 20, 35, 0.75);
+    backdrop-filter: blur(25px);
+    padding: 45px;
     border-radius: 40px;
     text-align: center;
     z-index: 10;
     width: 90%;
-    max-width: 380px;
+    max-width: 400px;
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
 }
 
+h1 { 
+    font-size: 26px; 
+    margin-bottom: 35px; 
+    font-weight: 700; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    line-height: 1.3;
+}
+
+/* --- ОНОВЛЕНІ КНОПКИ --- */
+.btn-group { 
+    display: flex; 
+    justify-content: center; 
+    gap: 20px; 
+    min-height: 60px;
+}
+
+button:not(.sound-control) {
+    padding: 15px 40px;
+    font-size: 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+#yesBtn { 
+    background: linear-gradient(135deg, #ff4d6d, #ff8fa3); 
+    color: white; 
+    border-bottom: 4px solid #c9184a;
+}
+
+#yesBtn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 25px rgba(255, 77, 109, 0.4);
+    filter: brightness(1.1);
+}
+
+#noBtn { 
+    background: linear-gradient(135deg, #495057, #6c757d); 
+    color: white; 
+    border-bottom: 4px solid #212529;
+    position: relative;
+}
+
+#noBtn:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+}
+
+/* Ефекти частинок */
 #effectContainer {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 6; /* Між персонажами та карткою */
+    z-index: 6;
 }
 
-/* Частинки */
 .floating-item {
     position: absolute;
     font-size: 35px;
     pointer-events: none;
     z-index: 99;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
     animation: floatAway 3.5s ease-out forwards;
 }
 
@@ -90,10 +146,13 @@ body {
     100% { transform: translateY(-450px) translateX(var(--rx)) rotate(var(--rd)) scale(1.2); opacity: 0; }
 }
 
+/* Мобільна адаптація */
 @media (max-width: 600px) {
-    .character { width: 110px; }
+    .character { width: 110px; bottom: 20px; }
     .approach-knight { left: 22% !important; }
     .approach-princess { right: 22% !important; }
+    .card { padding: 30px; }
+    button:not(.sound-control) { padding: 12px 30px; font-size: 14px; }
 }
 
 
