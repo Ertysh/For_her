@@ -3,122 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Alya</title>
-    <style>
-        body {
-            background-color: #ffeef2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-        }
-
-        .container {
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 400px;
-            width: 90%;
-            position: relative;
-        }
-
-        h1 { color: #d63384; font-size: 24px; margin-bottom: 30px; }
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            height: 50px;
-        }
-
-        button {
-            padding: 10px 25px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        #yesBtn { background-color: #ff4d6d; color: white; }
-        #noBtn { 
-            background-color: #adb5bd; 
-            color: white; 
-            position: absolute; /* Важливо для втікання */
-        }
-
-        .celebration { display: none; }
-        .heart { font-size: 50px; margin-top: 10px; }
-    </style>
+    <title>For Alya ❤️</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body id="pageBody">
 
-    <div class="container" id="mainContainer">
-        <h1 id="questionText">Will you be my Valentine?</h1>
+    <div class="card" id="mainCard">
+        <div class="heart-icon">💖</div>
+        <h1 id="mainTitle">Will you be my Valentine?</h1>
         
-        <div class="buttons" id="btnGroup">
+        <div class="btn-group" id="btnGroup">
             <button id="yesBtn">Yes</button>
             <button id="noBtn">No</button>
         </div>
     </div>
 
-    <script>
-        const questionText = document.getElementById('questionText');
-        const yesBtn = document.getElementById('yesBtn');
-        const noBtn = document.getElementById('noBtn');
-        const mainContainer = document.getElementById('mainContainer');
-
-        let noClickCount = 0;
-        let phase = 1; // 1: Valentine, 2: End Story, 3: Restore Comm
-
-        // Функція для переміщення кнопки "No"
-        function moveButton() {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
-            noBtn.style.left = `${x}px`;
-            noBtn.style.top = `${y}px`;
-            
-            noClickCount++;
-
-            // Після 5 спроб наведення/натискання змінюємо питання
-            if (noClickCount >= 5 && phase === 1) {
-                phase = 2;
-                questionText.innerText = "Do you want to end our story?";
-                noClickCount = 0; // Скидаємо для наступної фази
-            }
-        }
-
-        noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('click', moveButton);
-
-        yesBtn.addEventListener('click', () => {
-            if (phase === 1) {
-                // Якщо вона відразу натиснула "Так" на валентинку
-                showFinal();
-            } else if (phase === 2) {
-                // Якщо натиснула "Так" на "End our story"
-                phase = 3;
-                questionText.innerText = "Do you want to restore communication?";
-            } else if (phase === 3) {
-                // Якщо натиснула "Так" на відновлення спілкування
-                showFinal();
-            }
-        });
-
-        function showFinal() {
-            mainContainer.innerHTML = `
-                <h1>Happy Valentine's Day, Alya! ❤️</h1>
-                <div class="heart">💖✨🌹</div>
-                <p>I'm so glad you said yes!</p>
-            `;
-            // Можна додати запуск конфеті тут
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
