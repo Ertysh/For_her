@@ -1,68 +1,73 @@
-const question = document.getElementById('question');
+const mainTitle = document.getElementById('mainTitle');
 const yesBtn = document.getElementById('yesBtn');
 const noBtn = document.getElementById('noBtn');
+const mainCard = document.getElementById('mainCard');
+const pageBody = document.getElementById('pageBody');
 
-let noAttempts = 0;
-let currentStage = "VALENTINE"; // Етапи: VALENTINE -> END_STORY -> RESTORE -> FINAL
+let noClicks = 0;
+let storyPhase = "VALENTINE"; // Може бути: VALENTINE або END_STORY
 
-// Функція переміщення кнопки
-function runAway() {
-    // Обчислюємо випадкові координати в межах вікна
-    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+// Функція для рандомного переміщення кнопки по всьому екрану
+function moveNoButton() {
+    noBtn.style.position = 'fixed';
     
-    noBtn.style.left = `${x}px`;
-    noBtn.style.top = `${y}px`;
+    // Робимо відступи від країв екрану
+    const padding = 100;
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
     
-    noAttempts++;
-
-    // Якщо вона намагалася натиснути "No" 5 разів
-    if (noAttempts >= 5 && currentStage === "VALENTINE") {
-        currentStage = "END_STORY";
-        question.innerText = "Do you want to end our story?";
-        resetNoButton(); // Повертаємо кнопку в центр для чесного вибору
-    }
+    const randomX = Math.random() * maxX + (padding / 2);
+    const randomY = Math.random() * maxY + (padding / 2);
+    
+    noBtn.style.left = `${randomX}px`;
+    noBtn.style.top = `${randomY}px`;
 }
 
-// Повернення кнопки на місце, щоб вона могла натиснути "Yes" або "No"
+// Повернення кнопки в центр картки
 function resetNoButton() {
-    noBtn.style.position = "static";
-    noBtn.style.left = "auto";
-    noBtn.style.top = "auto";
+    noBtn.style.position = 'static';
+    noBtn.style.left = 'auto';
+    noBtn.style.top = 'auto';
 }
-
-// Обробка подій для кнопки "No"
-noBtn.addEventListener('mouseover', () => {
-    if (currentStage === "VALENTINE") runAway();
-});
 
 noBtn.addEventListener('click', () => {
-    if (currentStage === "VALENTINE") {
-        runAway();
-    } else {
-        // Якщо вона натиснула "No" на етапах після валентинки
-        alert("Wrong choice! Try again 😉");
+    if (storyPhase === "VALENTINE") {
+        noClicks++;
+        
+        if (noClicks < 4) {
+            moveNoButton();
+        } else {
+            // ФАЗА 2: Ультиматум
+            storyPhase = "END_STORY";
+            mainTitle.innerText = "Do you really want to end our story?";
+            resetNoButton();
+            noBtn.style.background = "#2b2d42"; // Робимо кнопку темнішою
+        }
+    } else if (storyPhase === "END_STORY") {
+        // Якщо натиснула "Ні" на питання про кінець історії
+        // Повертаємо до початку
+        storyPhase = "VALENTINE";
+        noClicks = 0;
+        mainTitle.innerText = "Will you be my Valentine?";
+        noBtn.style.background = "#8e9aaf";
+        resetNoButton();
     }
 });
 
-// Обробка кнопки "Yes"
 yesBtn.addEventListener('click', () => {
-    if (currentStage === "VALENTINE") {
-        showFinal();
-    } 
-    else if (currentStage === "END_STORY") {
-        currentStage = "RESTORE";
-        question.innerText = "Do you want to restore communication?";
-    } 
-    else if (currentStage === "RESTORE") {
-        showFinal();
+    if (storyPhase === "VALENTINE") {
+        // Перемога!
+        mainCard.innerHTML = `
+            <div class="heart-icon">❤️</div>
+            <h1>Happy Valentine's Day, Alya!</h1>
+            <p>You've made me the happiest person! ✨</p>
+        `;
+        pageBody.style.background = "#ffccd5";
+    } else if (storyPhase === "END_STORY") {
+        // Сумний фінал
+        mainTitle.innerText = "Our story has ended... 💔";
+        document.getElementById('btnGroup').style.display = 'none';
+        pageBody.classList.add('sad-ending');
+        document.querySelector('.heart-icon').innerText = '🌑';
     }
 });
-
-function showFinal() {
-    document.getElementById('card').innerHTML = `
-        <h1 style="font-size: 2.5rem;">Happy Valentine's Day, Alya! ❤️</h1>
-        <p style="font-size: 1.2rem; color: #666;">You've made the right choice!</p>
-        <div style="font-size: 4rem; margin-top: 20px;">✨💖🌸</div>
-    `;
-}
