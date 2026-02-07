@@ -1,4 +1,3 @@
-/* Основні стилі залишаються, додаємо адаптивність */
 body {
     margin: 0;
     height: 100vh;
@@ -12,13 +11,19 @@ body {
     overflow: hidden;
     font-family: 'Montserrat', sans-serif;
     transition: all 1s ease;
+    animation: backgroundBreathe 25s ease-in-out infinite alternate;
+}
+
+@keyframes backgroundBreathe {
+    0% { background-size: 110%; background-position: center; }
+    100% { background-size: 125%; background-position: 60% 40%; }
 }
 
 /* Кнопка звуку */
 .sound-control {
     position: fixed;
     left: 15px;
-    top: 15px; /* Переніс наверх, щоб зручніше на телефоні */
+    top: 15px;
     z-index: 100;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
@@ -27,82 +32,104 @@ body {
     width: 45px;
     height: 45px;
     cursor: pointer;
+    font-size: 20px;
+    border: none;
 }
 
 /* Персонажі */
 .character {
     position: absolute;
-    bottom: 20px;
-    width: 150px;
-    transition: all 1.5s ease-in-out;
+    bottom: 30px;
+    width: 160px;
+    transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 5;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
 }
 
-.knight-entry { left: -200px; animation: enterLeft 2s forwards 0.5s; }
-.princess-entry { right: -200px; animation: enterRight 2s forwards 0.5s; }
+.knight-entry { left: -250px; animation: enterLeft 2s forwards 0.5s; }
+.princess-entry { right: -250px; animation: enterRight 2s forwards 0.5s; }
 
-@keyframes enterLeft { to { left: 5%; } }
-@keyframes enterRight { to { right: 5%; } }
+@keyframes enterLeft { to { left: 10%; } }
+@keyframes enterRight { to { right: 10%; } }
 
-/* Стан зближення */
-.approach-knight { left: 20% !important; }
-.approach-princess { right: 20% !important; }
+/* --- ЗМІНИ ТУТ (Стан зближення для ПК) --- */
+/* Було 20%, стало 35% - вони стануть ближче до центру */
+.approach-knight { left: 35% !important; }
+.approach-princess { right: 35% !important; }
+/* ---------------------------------------- */
+
+.princess-leave { right: -400px !important; opacity: 0; }
 
 /* Картка */
 .card {
     background: rgba(30, 30, 50, 0.7);
     backdrop-filter: blur(20px);
-    padding: 30px;
-    border-radius: 30px;
+    padding: 40px;
+    border-radius: 40px;
     text-align: center;
     z-index: 10;
-    width: 85%; /* На телефонах займає 85% ширини */
+    width: 90%;
     max-width: 380px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
     color: white;
+    transition: all 0.5s ease;
 }
+
+h1 { font-size: 24px; margin-bottom: 30px; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 
 /* Кнопки */
 .btn-group { display: flex; justify-content: center; gap: 15px; }
 
 button:not(.sound-control) {
-    padding: 12px 30px;
+    padding: 14px 38px;
+    font-size: 16px;
     border-radius: 50px;
-    font-weight: 700;
-    border: none;
     cursor: pointer;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    border: none;
 }
 
-#yesBtn { background: linear-gradient(135deg, #ff4d6d, #ff8fa3); color: white; }
-#noBtn { background: #495057; color: white; position: relative; }
+#yesBtn { background: linear-gradient(135deg, #ff4d6d, #ff8fa3); color: white; box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3); }
+#noBtn { background: linear-gradient(135deg, #495057, #6c757d); color: white; position: relative; }
 
 /* --- МОБІЛЬНА АДАПТАЦІЯ --- */
 @media (max-width: 600px) {
     .character {
-        width: 100px; /* Зменшуємо персонажів на малих екранах */
-        bottom: 10px;
+        width: 110px;
+        bottom: 15px;
     }
     h1 { font-size: 20px; }
-    .card { padding: 20px; }
+    .card { padding: 25px; }
     
-    /* Змінюємо точки зближення для вузьких екранів */
-    .approach-knight { left: 10% !important; bottom: 5px; }
-    .approach-princess { right: 10% !important; bottom: 5px; }
+    @keyframes enterLeft { to { left: 5%; } }
+    @keyframes enterRight { to { right: 5%; } }
+
+    /* --- ЗМІНИ ТУТ (Стан зближення для телефону) --- */
+    /* Було 10%, стало 20% */
+    .approach-knight { left: 20% !important; }
+    .approach-princess { right: 20% !important; }
+    /* ----------------------------------------------- */
 }
 
 /* Ефекти */
 .floating-item {
     position: absolute;
-    font-size: 25px;
+    font-size: 30px;
     pointer-events: none;
-    animation: floatAway 4s forwards;
+    animation: floatAway 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     z-index: 4;
+    opacity: 0;
 }
 
 @keyframes floatAway {
-    0% { transform: translateY(0) scale(0.5); opacity: 0; }
+    0% { transform: translateY(0) rotate(0deg) scale(0.5); opacity: 0; }
     20% { opacity: 1; }
-    100% { transform: translateY(-300px) scale(1.5); opacity: 0; }
+    100% { transform: translateY(-400px) translateX(var(--random-x)) rotate(var(--random-deg)) scale(1.5); opacity: 0; }
 }
+
 
 
 
