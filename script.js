@@ -3,71 +3,76 @@ const yesBtn = document.getElementById('yesBtn');
 const noBtn = document.getElementById('noBtn');
 const mainCard = document.getElementById('mainCard');
 const pageBody = document.getElementById('pageBody');
+const icon = document.getElementById('icon');
 
 let noClicks = 0;
-let storyPhase = "VALENTINE"; // Може бути: VALENTINE або END_STORY
+let currentState = "PHASE_1"; // PHASE_1, PHASE_2, PHASE_3
 
-// Функція для рандомного переміщення кнопки по всьому екрану
 function moveNoButton() {
     noBtn.style.position = 'fixed';
-    
-    // Робимо відступи від країв екрану
     const padding = 100;
     const maxX = window.innerWidth - noBtn.offsetWidth - padding;
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-    
-    const randomX = Math.random() * maxX + (padding / 2);
-    const randomY = Math.random() * maxY + (padding / 2);
-    
-    noBtn.style.left = `${randomX}px`;
-    noBtn.style.top = `${randomY}px`;
+    noBtn.style.left = `${Math.random() * maxX + padding/2}px`;
+    noBtn.style.top = `${Math.random() * maxY + padding/2}px`;
 }
 
-// Повернення кнопки в центр картки
-function resetNoButton() {
+function resetButtons() {
     noBtn.style.position = 'static';
-    noBtn.style.left = 'auto';
-    noBtn.style.top = 'auto';
+    noBtn.style.background = "#8e9aaf";
+    noClicks = 0;
 }
 
-noBtn.addEventListener('click', () => {
-    if (storyPhase === "VALENTINE") {
-        noClicks++;
-        
-        if (noClicks < 4) {
-            moveNoButton();
-        } else {
-            // ФАЗА 2: Ультиматум
-            storyPhase = "END_STORY";
-            mainTitle.innerText = "Do you really want to end our story?";
-            resetNoButton();
-            noBtn.style.background = "#2b2d42"; // Робимо кнопку темнішою
-        }
-    } else if (storyPhase === "END_STORY") {
-        // Якщо натиснула "Ні" на питання про кінець історії
-        // Повертаємо до початку
-        storyPhase = "VALENTINE";
-        noClicks = 0;
-        mainTitle.innerText = "Will you be my Valentine?";
-        noBtn.style.background = "#8e9aaf";
-        resetNoButton();
+// ЛОГІКА КНОПКИ "YES"
+yesBtn.addEventListener('click', () => {
+    if (currentState === "PHASE_1") {
+        // Перехід до "Чи хочеш продовжити спілкування?"
+        currentState = "PHASE_2";
+        mainTitle.innerText = "Do you want to continue our communication?";
+        resetButtons();
+    } 
+    else if (currentState === "PHASE_2") {
+        // ФІНАЛ: ВІТАННЯ
+        mainCard.innerHTML = `
+            <div class="heart-icon">🌹</div>
+            <h1>Happy Valentine's Day, Alya! ❤️</h1>
+            <p>You've made the best choice!</p>
+        `;
+        pageBody.style.background = "#ffccd5";
+    }
+    else if (currentState === "PHASE_3") {
+        // ФІНАЛ: КІНЕЦЬ ІСТОРІЇ
+        mainTitle.innerText = "Our story has ended... 💔";
+        document.getElementById('btnGroup').style.display = 'none';
+        pageBody.classList.add('sad-mode');
+        icon.innerText = "🌑";
     }
 });
 
-yesBtn.addEventListener('click', () => {
-    if (storyPhase === "VALENTINE") {
-        // Перемога!
-        mainCard.innerHTML = `
-            <div class="heart-icon">❤️</div>
-            <h1>Happy Valentine's Day, Alya!</h1>
-            <p>You've made me the happiest person! ✨</p>
-        `;
-        pageBody.style.background = "#ffccd5";
-    } else if (storyPhase === "END_STORY") {
-        // Сумний фінал
-        mainTitle.innerText = "Our story has ended... 💔";
-        document.getElementById('btnGroup').style.display = 'none';
-        pageBody.classList.add('sad-ending');
-        document.querySelector('.heart-icon').innerText = '🌑';
+// ЛОГІКА КНОПКИ "NO"
+noBtn.addEventListener('click', () => {
+    if (currentState === "PHASE_1") {
+        noClicks++;
+        if (noClicks < 4) {
+            moveNoButton();
+        } else {
+            // Перехід до "Чи хочеш закінчити?"
+            currentState = "PHASE_3";
+            mainTitle.innerText = "Do you want to end our story?";
+            resetButtons();
+            noBtn.style.background = "#2b2d42"; 
+        }
+    } 
+    else if (currentState === "PHASE_2") {
+        // З "Продовжити спілкування" на "Закінчити історію"
+        currentState = "PHASE_3";
+        mainTitle.innerText = "Do you want to end our story?";
+        noBtn.style.background = "#2b2d42";
+    }
+    else if (currentState === "PHASE_3") {
+        // Повернення на початок
+        currentState = "PHASE_1";
+        mainTitle.innerText = "Will you be my Valentine?";
+        resetButtons();
     }
 });
